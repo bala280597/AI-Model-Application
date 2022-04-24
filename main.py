@@ -1,13 +1,3 @@
-# from flask import Flask,render_template
-# app = Flask(__name__)
-# @app.route('/')
-# def index():
-#     return render_template('login.html')
-# if __name__ == '__main__':
-#   app.run(host = "0.0.0.0",port=9099)
-
-# Store this code in 'app.py' file
-
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
@@ -16,11 +6,7 @@ import joblib
 import numpy as np
 from forms import HouseForm
 
-
-
 app = Flask(__name__)
-
-
 app.secret_key = 'Bala@123'
 
 app.config['MYSQL_HOST'] = '34.136.215.194'
@@ -35,7 +21,7 @@ def hello():
 	return "Hello World"
 
 @app.route("/predict", methods=["GET"])
-def home():
+def predict():
     house_form = HouseForm()
     if house_form.validate_on_submit():
         Avg_Area_Income = float(house_form.Avg_Area_Income.data)
@@ -85,7 +71,7 @@ def login():
 			}
 			cursor.execute(add_app, data_app)
 			mysql.connection.commit()
-			return render_template('index.html', msg = msg)
+			return redirect(url_for('predict'))
 		else:
 			msg = 'Incorrect username / password !'
 	return render_template('login.html', msg = msg)
@@ -125,4 +111,3 @@ def register():
 
 if __name__ == '__main__':
   app.run(host = "0.0.0.0",port=7001)
-
