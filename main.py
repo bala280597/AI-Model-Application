@@ -1,12 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, request,session
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
-import re
 import joblib
 import numpy as np
-from forms import HouseForm
 from flask_httpauth import HTTPBasicAuth
 from flask import jsonify
+import re
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
@@ -20,44 +19,16 @@ app.config['MYSQL_DB'] = 'aiml'
 
 mysql = MySQL(app)
 
-@app.route('/')
-def hello():
-	return "Hello World"
-
-@auth.verify_password
-def authenticate(username, password):
-    if username and password:
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM login WHERE username = % s AND password = % s', (username, password,))
-        account = cursor.fetchone()
-        if account:
-            session['loggedin'] = True
-            session['id'] = account['id']
-            session['username'] = account['username']
-            msg = 'Logged in successfully !'
-            add_app = ("INSERT into pricing "
-					   "(username)"
-					   "VALUES (%(username)s )")
-            data_app = {
-				'username': account['username']
-			}
-            cursor.execute(add_app, data_app)
-            mysql.connection.commit()
-            return True
-        else:
-            return False
-    return False
-
 @app.route("/login/predict", methods=["POST"])
 @auth.login_required
 def result():
     try:
-        Avg_Area_Income = request.args['Avg_Area_Income']
-        Avg_Area_House_Age = request.args['Avg_Area_House_Age']
-        Avg_Area_Number_of_Rooms = request.args['Avg_Area_Number_of_Rooms']
-        Avg_Area_Number_of_Bedrooms = request.args['Avg_Area_Number_of_Bedrooms']
-        Area_Population = request.args['Area_Population']
-        print(Avg_Area_Income,Avg_Area_Number_of_Rooms)
+        Avg_Area_Income = float(request.args['Avg_Area_Income'])
+        Avg_Area_House_Age = float(request.args['Avg_Area_House_Age'])
+        Avg_Area_Number_of_Rooms = float(request.args['Avg_Area_Number_of_Rooms'])
+        Avg_Area_Number_of_Bedrooms = float(request.args['Avg_Area_Number_of_Bedrooms'])
+        Area_Population = float(request.args['Area_Population'])
+        print(Avg_Area_Income, Avg_Area_House_Age,Avg_Area_Number_of_Rooms,Avg_Area_Number_of_Bedrooms,Area_Population)
         model = joblib.load("aiml/house.pkl")
         new_house = np.array([Avg_Area_Income, Avg_Area_House_Age,Avg_Area_Number_of_Rooms,Avg_Area_Number_of_Bedrooms,Area_Population]).reshape(1, -1)
         print(new_house)
@@ -95,8 +66,25 @@ def register():
       msg = 'Please fill out the form !'
     return jsonify(f"{msg}")
 
-
+@auth.verify_password
+def authenticate(username, password):
+    if username and password:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM login WHERE username = % s AND password = % s', (username, password,))
+        account = cursor.fetchone()
+        if account:
+            session['loggedin'] = True
+            session['id'] = account['id']
+            session['username'] = account['username']
+            msg = 'Logged in successfully !'
+            add_app = ("INSERT into pricing " "(username)" "VALUES (%(username)s )")
+            data_app = { 'username': account['username'] }
+            cursor.execute(add_app, data_app)
+            mysql.connection.commit()
+            return True
+        else:
+            return False
+    return False
 
 if __name__ == '__main__':
-  app.run(host = "0.0.0.0",port=7003,debug = True)#,ssl_context='adhoc')
-
+  app.run(host = "0.0.0.0",port=6550,debug = True)#,ssl_context='adhoc')
