@@ -11,11 +11,11 @@ app = Flask(__name__)
 auth = HTTPBasicAuth()
 
 
-app.secret_key = 'Bala@123'
-app.config['MYSQL_HOST'] = '34.136.215.194'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'Bala@123'
-app.config['MYSQL_DB'] = 'aiml'
+app.secret_key = argv[1]
+app.config['MYSQL_HOST'] = argv[0]
+app.config['MYSQL_USER'] = argv[3]
+app.config['MYSQL_PASSWORD'] = argv[1]
+app.config['MYSQL_DB'] = argv[2]
 
 mysql = MySQL(app)
 
