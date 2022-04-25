@@ -5,15 +5,18 @@ import re
 import joblib
 import numpy as np
 from forms import HouseForm
-import sys
+from flask_httpauth import HTTPBasicAuth
+from flask import jsonify
 
 app = Flask(__name__)
-app.secret_key = argv[1]
+auth = HTTPBasicAuth()
 
-app.config['MYSQL_HOST'] = argv[0]
-app.config['MYSQL_USER'] = argv[3]
-app.config['MYSQL_PASSWORD'] = argv[1]
-app.config['MYSQL_DB'] = argv[2]
+
+app.secret_key = 'Bala@123'
+app.config['MYSQL_HOST'] = '34.136.215.194'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'Bala@123'
+app.config['MYSQL_DB'] = 'aiml'
 
 mysql = MySQL(app)
 
@@ -22,6 +25,7 @@ def hello():
 	return "Hello World"
 
 @app.route("/login/predict", methods=["GET"])
+@auth.login_required
 def predict():
     house_form = HouseForm()
     if house_form.validate_on_submit():
@@ -30,15 +34,38 @@ def predict():
         Avg_Area_Number_of_Rooms = float(house_form.Avg_Area_Number_of_Rooms.data)
         Avg_Area_Number_of_Bedrooms = float(house_form.Avg_Area_Number_of_Bedrooms.data)
         Area_Population = float(house_form.Area_Population.data)
-
     return render_template("car.html", form=house_form)
+
+
+@auth.verify_password
+def authenticate(username, password):
+    if username and password:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM login WHERE username = % s AND password = % s', (username, password,))
+        account = cursor.fetchone()
+        if account:
+            session['loggedin'] = True
+            session['id'] = account['id']
+            session['username'] = account['username']
+            msg = 'Logged in successfully !'
+            add_app = ("INSERT into pricing "
+					   "(username)"
+					   "VALUES (%(username)s )")
+            data_app = {
+				'username': account['username']
+			}
+            cursor.execute(add_app, data_app)
+            mysql.connection.commit()
+            return True
+        else:
+            return False
+    return False
 
 @app.route("/login/predict", methods=["POST"])
 def result():
     try:
         form = request.form
         model = joblib.load("aiml/house.pkl")
-
         new_house = np.array(
             [float(form['Avg_Area_Income']), float(form['Avg_Area_House_Age']),
              float(form['Avg_Area_Number_of_Rooms']), float(form['Avg_Area_Number_of_Bedrooms']), float(form['Area_Population'])
@@ -46,9 +73,9 @@ def result():
         predicted_price = model.predict(new_house)
         if predicted_price < 0:
             predicted_price = 0
-        return render_template("result.html", price=int(predicted_price))
+        return jsonify(f"The Price of house is {float(predicted_price)}")
     except ValueError:
-        return render_template("error.html")
+        return jsonify(f"{ValueError}")
 
 @app.route('/login', methods =['GET', 'POST'])
 def login():
@@ -111,5 +138,4 @@ def register():
 	return render_template('register.html', msg = msg)
 
 if __name__ == '__main__':
-  app.run(host = "0.0.0.0",port=7001,debug = True,ssl_context='adhoc')
-
+  app.run(host = "0.0.0.0",port=7003,debug = True)#,ssl_context='adhoc')
