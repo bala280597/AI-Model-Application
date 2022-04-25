@@ -6,16 +6,17 @@ import numpy as np
 from flask_httpauth import HTTPBasicAuth
 from flask import jsonify
 import re
+import sys
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
 
 
-app.secret_key = argv[1]
-app.config['MYSQL_HOST'] = argv[0]
-app.config['MYSQL_USER'] = argv[3]
-app.config['MYSQL_PASSWORD'] = argv[1]
-app.config['MYSQL_DB'] = argv[2]
+app.secret_key = sys.argv[1]
+app.config['MYSQL_HOST'] = sys.argv[0]
+app.config['MYSQL_USER'] = sys.argv[3]
+app.config['MYSQL_PASSWORD'] = sys.argv[1]
+app.config['MYSQL_DB'] = sys.argv[2]
 
 mysql = MySQL(app)
 
