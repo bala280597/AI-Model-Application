@@ -6,18 +6,17 @@ import numpy as np
 from flask_httpauth import HTTPBasicAuth
 from flask import jsonify
 import re
-import sys
+import os
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
 
 
-app.secret_key = sys.argv[1]
-app.config['MYSQL_HOST'] = sys.argv[0]
-app.config['MYSQL_USER'] = sys.argv[3]
-app.config['MYSQL_PASSWORD'] = sys.argv[1]
-app.config['MYSQL_DB'] = sys.argv[2]
-
+app.secret_key = os.environ['PASSWORD']
+app.config['MYSQL_HOST'] = os.environ['IP']
+app.config['MYSQL_USER'] = "root"
+app.config['MYSQL_PASSWORD'] = os.environ['PASSWORD']
+app.config['MYSQL_DB'] = "aiml"
 mysql = MySQL(app)
 
 @app.route("/login/predict", methods=["POST"])
