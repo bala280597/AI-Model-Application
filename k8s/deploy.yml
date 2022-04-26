@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: aiml
+  name: aiml
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aiml
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: aiml
+    spec:
+      containers:
+      - image:  bala2805/bala:latest
+        name: aiml-api
+        ports:
+        - containerPort: 7000
+          #imagePullPolicy: IfNotPresent
+        env:
+        - name: IP
+          valueFrom:
+            secretKeyRef:
+              name: aiml
+              key: IP
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: aiml
+              key: PASSWORD
