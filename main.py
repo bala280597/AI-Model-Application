@@ -7,6 +7,9 @@ from flask_httpauth import HTTPBasicAuth
 from flask import jsonify
 import re
 import os
+import gcsfs
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = './auth.json'
+
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
@@ -19,6 +22,11 @@ app.config['MYSQL_PASSWORD'] = os.environ['PASSWORD']
 app.config['MYSQL_DB'] = "aiml"
 mysql = MySQL(app)
 
+def load_joblib(bucket_name, file_name):
+    fs = gcsfs.GCSFileSystem()
+    with fs.open(f'{bucket_name}/{file_name}') as f:
+        return joblib.load(f)
+    
 @app.route("/login/predict", methods=["POST"])
 @auth.login_required
 def result():
@@ -29,7 +37,8 @@ def result():
         Avg_Area_Number_of_Bedrooms = float(request.args['Avg_Area_Number_of_Bedrooms'])
         Area_Population = float(request.args['Area_Population'])
         print(Avg_Area_Income, Avg_Area_House_Age,Avg_Area_Number_of_Rooms,Avg_Area_Number_of_Bedrooms,Area_Population)
-        model = joblib.load("aiml/house.pkl")
+        #model = joblib.load("aiml/house.pkl")
+        model =  load_joblib('aiml_bala', 'model.pkl')
         new_house = np.array([Avg_Area_Income, Avg_Area_House_Age,Avg_Area_Number_of_Rooms,Avg_Area_Number_of_Bedrooms,Area_Population]).reshape(1, -1)
         print(new_house)
         predicted_price = model.predict(new_house)
