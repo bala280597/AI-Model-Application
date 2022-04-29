@@ -4,6 +4,8 @@ import gcsfs
 import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
+from gcloud import storage
+
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '../auth.json'
 
 def load_joblib(bucket_name, file_name):
@@ -18,3 +20,7 @@ X_train, X_test, y_train, y_test = train_test_split(x,y,test_size=0.4,random_sta
 lm = LinearRegression()
 lm = lm.fit(X_train, y_train)
 joblib.dump(lm,"house.pkl")
+client = storage.Client()
+bucket = client.get_bucket('aiml_bala')
+blob = bucket.blob('model.pkl')
+blob.upload_from_filename('model.pkl')
