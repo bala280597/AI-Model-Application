@@ -1,5 +1,5 @@
 name: Model Training
-
+on:
   workflow_dispatch:
 
 env:
