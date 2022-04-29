@@ -52,6 +52,7 @@ jobs:
     - name: Publish
       run: |-
         docker push bala2805/bala 
+        docker rmi bala2805/bala
     - id: 'auth'
       uses: 'google-github-actions/auth@v0'
       with:
