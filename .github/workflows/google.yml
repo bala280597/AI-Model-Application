@@ -53,5 +53,5 @@ jobs:
  
     - name: Deploy
       run: |-
-        kubectl get deploy
+        kubectl apply -f k8s/deploy.yml
  
