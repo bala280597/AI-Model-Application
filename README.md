@@ -47,3 +47,9 @@
 3) Application Deployment Pipeline is triggered when developer updates the code or when .pkl file is updated in bucket. Pipeline builds Docker image and Deployed to Kubernetes Cluster 
 ![image](https://user-images.githubusercontent.com/47313756/165998381-6e4b53e4-61ab-45ec-b97a-36d95137ba68.png)
 
+# TLS Certificate
+1) In Kubernetes, To enable HTTPS for application, we need Domain name with SSL certificate and create Ingress(L7 Load Balancer),because Pods(server where app is running) in kubernetes are not permanent resource so self signed certificates is not a good practise.
+2) So If we have custom domain, we would have create Ingress resource to enable SSL/TLS.
+3) In this challenge, I do not have custom domain , So I created Load Balancer Service( L4 Load Balancer) which route based on TCP/UDP protocols.
+4) My application currently supports HTTP endpoint only. But we can also enable HTTPS endpoints.
+
