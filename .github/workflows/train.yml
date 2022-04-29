@@ -36,5 +36,5 @@ jobs:
 
     - name: Publish
       run: |-
-        docker push bala2805/bala 
-        docker rmi bala2805/bala
+        docker push bala2805/batch
+        docker rmi bala2805/batch
