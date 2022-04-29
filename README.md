@@ -58,3 +58,7 @@
 1) In Kubernetes, To enable HTTPS for application, we need Domain name with SSL certificate and create Ingress(L7 Load Balancer),because Pods(server where app is running) in kubernetes are not permanent resource so self signed certificates is not a good practise.
 2) In this challenge, I do not have a custom domain , So I created a Load Balancer Service( L4 Load Balancer) which routes based on TCP/UDP protocols.
 3) My application currently supports HTTP endpoint only. But I can also enable HTTPS endpoints if a custom domain is provided.
+
+# Need to be Improved:
+1) Enable HTTPS endpoint for application in Kubernetes with custom domain.
+2) Model Training can be implemented in Batch processing.
