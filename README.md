@@ -29,10 +29,9 @@
 ![GCS](https://user-images.githubusercontent.com/47313756/165990057-1703b91c-dc22-4fdb-ad53-6e5462951016.png)
 
 # Google Cloud Function
-![image](https://user-images.githubusercontent.com/47313756/165994033-05e91886-b746-470c-9f73-c6386fd4396e.png)
 1) When new data arrives to cloud bucket, Cloud function is triggered which invoke Github Action Pipeline which train Data sets and uploads Model to another bucket.
 2) When Model is updated in bucket, Cloud function triggers Github Action Pipeline which deploy Flask application into Kubernetes Cluster.
-![image](https://user-images.githubusercontent.com/47313756/165998381-6e4b53e4-61ab-45ec-b97a-36d95137ba68.png)
+![image](https://user-images.githubusercontent.com/47313756/165994033-05e91886-b746-470c-9f73-c6386fd4396e.png)
 
 # Google Kubernetes Engine
 1) Flask application is deployed in Google Kubernetes Engine and Load Balancer is created to route traffic.
@@ -46,3 +45,5 @@
 1) 2 Pipeline is consumed one for training model  and other for Application Deployment.
 2) Training model Pipeline is triggered when new data arrives in storage bucket .Pipeline performs model training and upload .pkl file to another storage bucket.
 3) Application Deployment Pipeline is triggered when developer updates the code or when .pkl file is updated in bucket. Pipeline builds Docker image and Deployed to Kubernetes Cluster 
+![image](https://user-images.githubusercontent.com/47313756/165998381-6e4b53e4-61ab-45ec-b97a-36d95137ba68.png)
+
