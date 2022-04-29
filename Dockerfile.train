@@ -1,0 +1,6 @@
+FROM python:3.7
+WORKDIR /src
+COPY ./train/ .
+COPY auth.json .
+RUN pip install --no-cache-dir -r requirements.txt
+RUN python train.py

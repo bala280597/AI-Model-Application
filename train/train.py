@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from gcloud import storage
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '../auth.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = './auth.json'
 
 def load_joblib(bucket_name, file_name):
     fs = gcsfs.GCSFileSystem()
