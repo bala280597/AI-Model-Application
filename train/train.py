@@ -19,7 +19,7 @@ y = df['Price']
 X_train, X_test, y_train, y_test = train_test_split(x,y,test_size=0.4,random_state=101)
 lm = LinearRegression()
 lm = lm.fit(X_train, y_train)
-joblib.dump(lm,"house.pkl")
+joblib.dump(lm,"model.pkl")
 client = storage.Client()
 bucket = client.get_bucket('aiml_bala')
 blob = bucket.blob('model.pkl')
