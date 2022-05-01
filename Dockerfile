@@ -10,7 +10,7 @@ RUN apt-get -y install nginx \
     && apt-get -y install python3-dev \
     && apt-get -y install build-essential
 #ENTRYPOINT ["python", "main.py"]
-EXPOSE 7000
+EXPOSE 80
 COPY nginx.conf /etc/nginx
 RUN chmod +x ./start.sh
 CMD ["./start.sh"]
