@@ -26,6 +26,9 @@ def load_joblib(bucket_name, file_name):
     fs = gcsfs.GCSFileSystem()
     with fs.open(f'{bucket_name}/{file_name}') as f:
         return joblib.load(f)
+@app.route("/login/predict", methods=["GET","POST"])    
+def hello_world():
+    return  jsonify('Hello World')
     
 @app.route("/login/predict", methods=["POST"])
 @auth.login_required
