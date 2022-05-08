@@ -18,7 +18,7 @@ spec:
         app: aiml
     spec:
       containers:
-      - image:  bala2805/bala:latest
+      - image:  bala2805/bala:tlsv1
         resources:
           requests:
             memory: "500Mi"
