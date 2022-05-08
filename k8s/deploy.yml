@@ -19,6 +19,13 @@ spec:
     spec:
       containers:
       - image:  bala2805/bala:latest
+        resources:
+          requests:
+            memory: "500Mi"
+            cpu: "700m"
+          limits:
+            memory: "1Gi"
+            cpu: "950m"
         name: aiml-api
         ports:
         - containerPort: 7000
