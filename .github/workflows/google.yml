@@ -35,12 +35,12 @@ jobs:
     # Build the Docker image
     - name: Build
       run: |-
-        docker build -t bala2805/bala .
+        docker build -t bala2805/bala:tlsv1 .
 
     - name: Publish
       run: |-
-        docker push bala2805/bala 
-        docker rmi bala2805/bala
+        docker push bala2805/bala:tlsv1
+        docker rmi bala2805/bala:tlsv1
     - id: 'auth'
       uses: 'google-github-actions/auth@v0'
       with:
