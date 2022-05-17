@@ -60,3 +60,4 @@
 
 # Need to be Improved:
 1) Model Training can be implemented in Batch processing.
+2) To sync Active directory using Gsync or migrate directory to cloud.
